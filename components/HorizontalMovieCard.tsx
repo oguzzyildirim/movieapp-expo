@@ -1,4 +1,5 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { router } from "expo-router";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 
 interface MovieCardProps {
   movie: types.movie.Result;
@@ -6,8 +7,14 @@ interface MovieCardProps {
 }
 
 export default function HorizontalMovieCard(props: MovieCardProps) {
+  const handlePress = () => {
+    router.push({
+      pathname: '/(tabs)/(home)/movieDetail',
+      params: { movieID: props.movie.id}
+    })
+  }
   return (
-    <View style={styles.mainContainer}>
+    <TouchableOpacity style={styles.mainContainer} onPress={handlePress}>
       <Image
         source={{
           uri: `${process.env.IMAGE_BASE_URL}/${props.movie.poster_path}`,
@@ -17,7 +24,7 @@ export default function HorizontalMovieCard(props: MovieCardProps) {
       <Text style={styles.text}>
         {props.index}
       </Text>
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -25,18 +32,19 @@ const styles = StyleSheet.create({
   mainContainer: {
     position: "relative",
     flexDirection: "row",
-    width: "100%",
+    marginRight: 30,
   },
   text: {
     position: "absolute",
-    borderWidth: 1,
-    borderColor: "#0296E5",
-    fontFamily: 'Montserrat',
+    fontFamily: 'Montserrat-SemiBold',
     fontSize: 96,
-    fontWeight: 'semibold',
+    color: '#242A32',
     opacity: 1,
     bottom: '-20%',
-    left: '18%',
+    left: '-6%',
+    textShadowOffset: { width: 0.5, height: 0.5 },
+    textShadowColor: '#0296E5',
+    textShadowRadius: 2.5,
   },
   image: {
     width: 144,

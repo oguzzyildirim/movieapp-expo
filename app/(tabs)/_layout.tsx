@@ -36,23 +36,25 @@ export default function TabLayout() {
         tabBarStyle: {
           height: '11%',
           ...Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        })
-      },
+            ios: {
+              // Use a transparent background on iOS to show the blur effect
+              position: 'absolute',
+            },
+            default: {},
+          })
+        },
         tabBarIconStyle: {
           marginTop: '4%',
           marginBottom: '6%',
-        }
+        },
       }}>
+      
       <Tabs.Screen
-        name="index"
+        name="(home)"
         options={{
           title: 'Home',
           tabBarIcon: ({ color }) => renderTabIcon(require('@/assets/icons/Home.png'), color),
+          animation: 'shift',
         }}
       />
       <Tabs.Screen
@@ -60,6 +62,7 @@ export default function TabLayout() {
         options={{
           title: 'Search',
           tabBarIcon: ({ color }) => renderTabIcon(require('@/assets/icons/Search.png'), color),
+          animation: 'shift',
         }}
       />
       <Tabs.Screen
@@ -67,6 +70,7 @@ export default function TabLayout() {
         options={{
           title: 'Watch list',
           tabBarIcon: ({ color }) => renderTabIcon(require('@/assets/icons/Watchlist.png'), color),
+          animation: 'shift',
         }}
       />
     </Tabs>
