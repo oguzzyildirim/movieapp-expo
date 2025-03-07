@@ -24,9 +24,7 @@ export default function HorizontalMovieCard(props: MovieCardProps) {
 const styles = StyleSheet.create({
   mainContainer: {
     position: "relative",
-    display: "flex",
     flexDirection: "row",
-    justifyContent: "space-around",
     width: "100%",
   },
   text: {

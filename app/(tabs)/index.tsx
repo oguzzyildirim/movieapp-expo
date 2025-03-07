@@ -106,7 +106,7 @@ export default function HomeScreen() {
       <SafeAreaView style={styles.safeAreaViewContainer}>
         <View style={styles.headerViewContainer}>
           <Text style={styles.headerText}>
-            {movie?.dates?.maximum?.toString()}
+            {homePageHeaderTitle}
           </Text>
           <View style={styles.searchBarContainer}>
             <TextInput
@@ -127,7 +127,7 @@ export default function HomeScreen() {
             data={movieResults}
             renderItem={({ item, index }) => <HorizontalMovieCard movie={item} index={index + 1}/>}
             contentContainerStyle={styles.flatListCotainer}
-            showsVerticalScrollIndicator={true}
+            showsVerticalScrollIndicator={false}
           />
         {/* <View style={styles.flashListContainer}>
           <FlatList
@@ -180,14 +180,16 @@ const styles = StyleSheet.create({
   flatListCotainer: {
     flexDirection: 'row',
     width: '100%',
-    height: 240,
-    backgroundColor: 'green'
+    height: '44%',
+    marginHorizontal: "6%",
+    marginTop: '8%',
+    gap: '8%',
   },
 
   flashListContainer: {
     flexDirection: 'row',
     width: "100%",
-    height: 240,
+    height: '44%',
     marginTop: "8%",
     backgroundColor: 'green',
   },
