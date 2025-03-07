@@ -1,0 +1,1 @@
+export const homePageHeaderTitle = 'What do you want to watch?';
