@@ -43,7 +43,7 @@ export default function MovieDetail() {
       <View style={styles.headerContainer}>
         <Image
           source={{
-            uri: `${process.env.IMAGE_BASE_URL}/${movieDetailResponse?.backdrop_path}`,
+            uri: `${process.env.IMAGE_ORIGINAL_URL}/${movieDetailResponse?.backdrop_path}`,
           }}
           style={styles.image}
           resizeMode="cover"
