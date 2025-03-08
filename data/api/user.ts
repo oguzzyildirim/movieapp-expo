@@ -1,5 +1,4 @@
 import axios from "axios";
-import { backendURL } from "./requestHelpers";
 
 export async function GetAllUsers(): Promise<types.user.UserData[]> {
     // aslında şöyle olmalı
@@ -8,7 +7,7 @@ export async function GetAllUsers(): Promise<types.user.UserData[]> {
     // '/users' -> bu param olarak func'a verilecek
     // optional bir param daha olacak ve adı qApi olacak. aApi bir obje olacak, filtre, sort, pagination için limitOffSet vb field'lar alacak.
     //return resp = await request<types.user.UserData[]>('/users')
-  const resp = await axios.get(`${backendURL}/user`);
+  const resp = await axios.get(`/user`);
   if (resp.status !== 200) {
     throw new Error("Failed to fetch users");
   }
