@@ -2,7 +2,6 @@ import {
   StyleSheet,
   View,
   Text,
-  useColorScheme,
   TextInput,
 } from "react-native";
 import { Colors } from "@/constants/Colors";
@@ -14,6 +13,7 @@ import { IconSymbol } from "@/components/ui/IconSymbol";
 import { get } from "@/data/requestHelpers";
 import HorizontalMovieCard from "@/components/HorizontalMovieCard";
 import { FlashList } from "@shopify/flash-list";
+import { router } from "expo-router";
 
 export default function HomeScreen() {
   const [movieResults, setMovieResults] = useState<types.movie.Result[]>([]);
@@ -59,6 +59,9 @@ export default function HomeScreen() {
               placeholderTextColor="#67686D"
               clearButtonMode="always"
               style={styles.searchBar}
+              onFocus={() => {
+                router.push('/(tabs)/(search)/search');
+              }}
             ></TextInput>
             <IconSymbol
               size={28}

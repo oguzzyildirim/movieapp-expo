@@ -5,18 +5,19 @@ import { View, Text, StyleSheet, Image } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
-import MovieInfoItem from "./components/MovieInfoItem";
+import MovieInfoItem from "@/components/movieDetail/MovieInfoItem";
+import MovieDetailTabs from "@/components/movieDetail/MovieDetailTabs";
 import { Divider } from "react-native-paper";
 import { extractYear } from "@/Utils/Helpers";
 
 export default function MovieDetail() {
   const { movieID } = useLocalSearchParams();
   const [movieDetailResponse, setMovieDetailResponse] =
-    useState<types.movieDetai.MovieDetaiResponse | null>(null);
+    useState<types.movieDetail.MovieDetaiResponse | null>(null);
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const movieData = await get<types.movieDetai.MovieDetaiResponse>(
+        const movieData = await get<types.movieDetail.MovieDetaiResponse>(
           `/movie/${movieID}`,
           {
             language: "en-US",
@@ -43,7 +44,7 @@ export default function MovieDetail() {
       <View style={styles.headerContainer}>
         <Image
           source={{
-            uri: `${process.env.IMAGE_ORIGINAL_URL}/${movieDetailResponse?.backdrop_path}`,
+            uri: `${process.env.EXPO_PUBLIC_IMAGE_ORIGINAL_URL}/${movieDetailResponse?.backdrop_path}`,
           }}
           style={styles.image}
           resizeMode="cover"
@@ -58,7 +59,7 @@ export default function MovieDetail() {
 
         <Image
           source={{
-            uri: `${process.env.IMAGE_BASE_URL}/${movieDetailResponse?.poster_path}`,
+            uri: `${process.env.EXPO_PUBLIC_IMAGE_BASE_URL}/${movieDetailResponse?.poster_path}`,
           }}
           style={styles.posterImage}
           resizeMode="cover"
@@ -87,6 +88,12 @@ export default function MovieDetail() {
           />
         </View>
       </View>
+      <View style={styles.movieDetailTab}>
+        <MovieDetailTabs
+          movieID={movieDetailResponse?.id?.toString() || ""}
+          description={movieDetailResponse?.overview || ""}
+        ></MovieDetailTabs>
+      </View>
     </View>
   );
 }
@@ -101,7 +108,7 @@ const styles = StyleSheet.create({
     position: "relative",
     display: "flex",
     width: "100%",
-    height: "36%",
+    height: "28%",
     borderBottomLeftRadius: 16,
     borderBottomRightRadius: 16,
   },
@@ -114,8 +121,8 @@ const styles = StyleSheet.create({
 
   posterImage: {
     position: "absolute",
-    height: "55%",
-    width: "25%",
+    height: "57%",
+    width: "24%",
     borderRadius: 16,
     bottom: "-28%",
     left: "8%",
@@ -170,5 +177,13 @@ const styles = StyleSheet.create({
     width: 1,
     height: "100%",
     backgroundColor: "#92929D",
+  },
+
+  movieDetailTab: {
+    flex: 1,
+    width: "100%",
+    bottom: "-15%",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
   },
 });

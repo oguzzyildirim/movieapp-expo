@@ -5,7 +5,7 @@
 
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
-const API_BASE_URL = process.env.API_URL;
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 
 const TIMEOUT = 30000;
 
@@ -20,7 +20,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = process.env.API_KEY;
+    const token = process.env.EXPO_PUBLIC_API_KEY;
     
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;

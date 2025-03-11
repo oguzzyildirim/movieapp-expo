@@ -8,8 +8,6 @@ import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   const renderTabIcon = (icon: any, color: string) => (
     <Image
       source={icon} 
@@ -58,7 +56,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="(search)"
         options={{
           title: 'Search',
           tabBarIcon: ({ color }) => renderTabIcon(require('@/assets/icons/Search.png'), color),

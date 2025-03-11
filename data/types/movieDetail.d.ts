@@ -1,4 +1,4 @@
-declare namespace types.movieDetai {
+declare namespace types.movieDetail {
   interface MovieDetaiResponse {
     adult?: boolean;
     backdrop_path?: string;
@@ -26,6 +26,12 @@ declare namespace types.movieDetai {
     video?: boolean;
     vote_average?: number;
     vote_count?: number;
+  }
+
+  interface EnhancedMovieResult extends types.movie.Result {
+    genres?: Genre[];
+    runtime?: number;
+    release_date?: string;
   }
 
   interface Genre {

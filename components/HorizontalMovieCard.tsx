@@ -17,7 +17,7 @@ export default function HorizontalMovieCard(props: MovieCardProps) {
     <TouchableOpacity style={styles.mainContainer} onPress={handlePress}>
       <Image
         source={{
-          uri: `${process.env.IMAGE_BASE_URL}/${props.movie.poster_path}`,
+          uri: `${process.env.EXPO_PUBLIC_IMAGE_BASE_URL}/${props.movie.poster_path}`,
         }}
         style={styles.image}
       />

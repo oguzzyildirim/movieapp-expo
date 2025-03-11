@@ -35,6 +35,12 @@ interface Dates {
     LV = "lv",
     Zh = "zh",
   }
+
+  interface EnhancedMovieResult extends types.movie.Result {
+    genres?: string[];
+    runtime?: number;
+    release_date?: string;
+  }
   
   // Converts JSON strings to/from your types
   export class Convert {

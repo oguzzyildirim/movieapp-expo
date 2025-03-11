@@ -1,5 +1,4 @@
-import { router, Stack } from 'expo-router';
-import { useEffect } from 'react';
+import { Stack } from 'expo-router';
 import { View } from 'react-native';
 
 export default function HomeLayout() {
