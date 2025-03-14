@@ -1,23 +1,52 @@
 import { get } from "@/data/requestHelpers";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useNavigation, usePathname, useSegments } from "expo-router";
 import { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
+import { Image } from 'expo-image';
 import { Colors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
-import MovieInfoItem from "@/components/movieDetail/MovieInfoItem";
-import MovieDetailTabs from "@/components/movieDetail/MovieDetailTabs";
+import MovieInfoItem from "@/components/MovieDetail/MovieInfoItem";
+import MovieDetailTabs from "@/components/MovieDetail/MovieDetailTabs";
 import { Divider } from "react-native-paper";
 import { extractYear } from "@/Utils/Helpers";
+import { blurhash } from "@/constants/StaticValues";
 
 export default function MovieDetail() {
+  const navigation = useNavigation();
+  const pathname = usePathname();
+  const segments = useSegments();
   const { movieID } = useLocalSearchParams();
   const [movieDetailResponse, setMovieDetailResponse] =
-    useState<types.movieDetail.MovieDetaiResponse | null>(null);
+    useState<types.movieDetail.MovieDetailResponse | null>(null);
+
+    // useEffect(() => {
+    //   // Log the current path
+    //   console.log('Current path:', pathname);
+      
+    //   // Log all segments in the path
+    //   console.log('Path segments:', segments);
+      
+    //   // Log the full navigation state (includes the entire stack)
+    //   if (navigation.getState) {
+    //     const state = navigation.getState();
+    //     console.log('Full navigation state:', JSON.stringify(state, null, 2));
+        
+    //     // Log just the routes in a more readable format
+    //     if (state) {
+    //       console.log('Route stack:', state.routes.map(route => ({
+    //         name: route.name,
+    //         key: route.key,
+    //         params: route.params
+    //       })));
+    //     }
+    //   }
+    // }, [pathname, navigation]);
+
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const movieData = await get<types.movieDetail.MovieDetaiResponse>(
+        const movieData = await get<types.movieDetail.MovieDetailResponse>(
           `/movie/${movieID}`,
           {
             language: "en-US",
@@ -47,7 +76,8 @@ export default function MovieDetail() {
             uri: `${process.env.EXPO_PUBLIC_IMAGE_ORIGINAL_URL}/${movieDetailResponse?.backdrop_path}`,
           }}
           style={styles.image}
-          resizeMode="cover"
+          placeholder={{ blurhash }}
+          contentFit="cover"
         />
 
         <BlurView intensity={20} tint="dark" style={styles.rate}>
@@ -62,7 +92,8 @@ export default function MovieDetail() {
             uri: `${process.env.EXPO_PUBLIC_IMAGE_BASE_URL}/${movieDetailResponse?.poster_path}`,
           }}
           style={styles.posterImage}
-          resizeMode="cover"
+          placeholder={{ blurhash }}
+          contentFit="cover"
         />
 
         <View style={styles.titleContainer}>
@@ -72,12 +103,12 @@ export default function MovieDetail() {
         <View style={styles.movieInfoContainer}>
           <MovieInfoItem
             iconName="calendar-outline"
-            text={extractYear(movieDetailResponse?.release_date?.toString())}
+            text={extractYear(movieDetailResponse?.release_date?.toString() || '-')}
           />
           <Divider style={styles.divider} />
           <MovieInfoItem
             iconName="time-outline"
-            text={`${movieDetailResponse?.runtime?.toString()} minutes`}
+            text={`${movieDetailResponse?.runtime?.toString() || '-'} minutes`}
           />
           <Divider style={styles.divider} />
           <MovieInfoItem
@@ -91,6 +122,7 @@ export default function MovieDetail() {
       <View style={styles.movieDetailTab}>
         <MovieDetailTabs
           movieID={movieDetailResponse?.id?.toString() || ""}
+          isMovieDetailLoaded={movieDetailResponse !== null}
           description={movieDetailResponse?.overview || ""}
         ></MovieDetailTabs>
       </View>

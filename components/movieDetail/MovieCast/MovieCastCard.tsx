@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     gap: 8,
     marginBottom: 24,
     marginLeft: '10%',
-    //backgroundColor: 'green'
+    backgroundColor: 'green'
   },
 
   image: {

@@ -64,7 +64,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="watchlist"
+        name="(watchlist)"
         options={{
           title: 'Watch list',
           tabBarIcon: ({ color }) => renderTabIcon(require('@/assets/icons/Watchlist.png'), color),

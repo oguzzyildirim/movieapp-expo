@@ -1,19 +1,53 @@
 import { Ionicons } from "@expo/vector-icons";
-import { router, Stack } from "expo-router";
+import { router, Stack, useLocalSearchParams } from "expo-router";
 import { View, TouchableOpacity } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { useEffect, useReducer, useState } from "react";
+import { useAsyncStorage } from "@/hooks/useAsyncStorage";
 
-export default function HomeLayout() {
-  const [isSaved, toggleSaved] = useReducer((state) => !state, false);
+export default function MovieDetailLayout() {
+  const { movieID } = useLocalSearchParams();
+  const [isSaved, setIsSaved] = useState(false);
   const [headerRightIconName, setHeaderRightIconName] = useState<
     "bookmark-outline" | "bookmark"
   >("bookmark-outline");
+
+  const { storedData, storeData } = useAsyncStorage<number[]>("favorite_movies", []);
+
+  useEffect(() => {
+    const checkFavoriteStatus = async () => {
+      try {
+        if (movieID) {
+          const movieIdNumber = Number(movieID);
+          setIsSaved(storedData.includes(movieIdNumber));
+        }
+      } catch (error) {
+        console.error("Error checking favorite status:", error);
+      }
+    };
+    
+    checkFavoriteStatus();
+  }, [movieID, storedData]);
 
   useEffect(() => {
     setHeaderRightIconName(isSaved ? "bookmark" : "bookmark-outline");
   }, [isSaved]);
 
+  const handleToggleFavorite = async () => {
+    try {
+      const movieIdNumber = Number(movieID);
+      const updatedData = isSaved
+        ? storedData.filter(id => id !== movieIdNumber)
+        : [...storedData, movieIdNumber];
+      await storeData(updatedData);
+      console.log('storedData---->>>' + storedData);
+      setIsSaved(!isSaved);
+    } catch (error) {
+      console.error("Error toggling favorite status:", error);
+    }
+  };
+
+  console.log('movieID---->>>' + movieID);
   return (
     <View style={{ flex: 1 }}>
       <Stack>
@@ -35,7 +69,7 @@ export default function HomeLayout() {
             ),
             headerRight: () => (
               <TouchableOpacity
-                onPress={() => toggleSaved()}
+                onPress={handleToggleFavorite}
                 style={{ padding: "6%", paddingLeft: "3%" }}
                 activeOpacity={0.5}
               >

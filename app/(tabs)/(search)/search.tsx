@@ -13,7 +13,6 @@ import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { IconSymbol } from "@/components/ui/IconSymbol";
-import MovieDetailTabs from "../../../components/movieDetail/MovieDetailTabs";
 import { Colors } from "@/constants/Colors";
 import { useCallback, useEffect, useState } from "react";
 import { get } from "@/data/requestHelpers";
@@ -24,14 +23,10 @@ import { FlashList } from "@shopify/flash-list";
 
 
 export default function SearchScreen() {
-  //const [searchResults, setSearchResults] = useState<types.movie.Result[]>([]);
   const [searchResults, setSearchResults] = useState<types.movieDetail.EnhancedMovieResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState("");
   const params = useLocalSearchParams();
-  // const renderItem = useCallback(({ item }: { item: types.movie.Result }) => {
-  //   return <SearchedMovieCard movieResult={item} />;
-  // }, []);
   const renderItem = useCallback(({ item }: { item: types.movieDetail.EnhancedMovieResult }) => {
     return <SearchedMovieCard movieResult={item} />;
   }, []);
@@ -50,7 +45,6 @@ export default function SearchScreen() {
     }
   }, [searchText]);
 
-  // New Logic
   const fetchMovieDetails = async (movieId: number): Promise<any> => {
     try {
       const movieDetails = await get(`/movie/${movieId}`, {
@@ -62,11 +56,11 @@ export default function SearchScreen() {
       return null;
     }
   };
-  // New Logic
+
   const fetchSearchedMovies = async (query: string) => {
     try {
       setLoading(true);
-      const movieData = await get<types.movie.Movie>(`/search/movie`, {
+      const movieData = await get<types.movie.MovieResult>(`/search/movie`, {
         query: query,
         language: "en-US",
         page: 1,
@@ -76,16 +70,13 @@ export default function SearchScreen() {
       if (movieData?.results !== undefined) {
         console.log("Search successful for:", query);
 
-        setSearchResults(movieData.results as types.movieDetail.EnhancedMovieResult[]);
-
         const enhancedResults = await Promise.all(
           movieData.results.map(async (movie) => {
             const details = await fetchMovieDetails(movie.id);
-            
             if (details) {
               return {
                 ...movie,
-                genres: details.genres?.map((genre: any) => genre.name),
+                genres: details.genres,
                 runtime: details.runtime,
                 release_date: details.release_date,
               };
@@ -105,30 +96,6 @@ export default function SearchScreen() {
       setLoading(false);
     }
   };
-
-  // const fetchSearchedMovies = async (query: string) => {
-  //   try {
-  //     setLoading(true);
-  //     const movieData = await get<types.movie.Movie>(`/search/movie`, {
-  //       query: query,
-  //       language: "en-US",
-  //       page: 1,
-  //       include_adult: false,
-  //     });
-
-  //     if (movieData?.results !== undefined) {
-  //       console.log("Search successful for:", query);
-  //       setSearchResults(movieData.results);
-  //     } else {
-  //       setSearchResults([]);
-  //     }
-  //   } catch (err) {
-  //     console.error("Failed to fetch search results:", err);
-  //     setSearchResults([]);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   return (
     <View style={styles.mainContainer}>

@@ -5,31 +5,31 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
 interface SearchedMovieCardProps {
-  //movieResult: types.movie.Result;
-  movieResult: types.movieDetail.EnhancedMovieResult;
+  movieResult?: types.movieDetail.EnhancedMovieResult;
+  watchListResult?: types.movieDetail.MovieDetailResponse;
 }
 
 export default function SearchedMovieCard(props: SearchedMovieCardProps) {
-  // New Logic
-  const releaseYear = props.movieResult.release_date
-    ? new Date(props.movieResult.release_date).getFullYear()
-    : null;
-
+  const movieID = props.movieResult?.id ? props.movieResult?.id : props.watchListResult?.id;
   const handlePress = () => {
     router.push({
       pathname: "/(tabs)/(home)/movieDetail",
-      params: { movieID: props.movieResult.id },
+      params: { movieID: movieID },
     });
   };
 
-  const genres = props.movieResult.genres?.slice(0, 2).join(", ");
+  const result = props.watchListResult ? props.watchListResult : props.movieResult;
+  const genres = result?.genres?.slice(0, 2).map(genre => genre.name).join(", ");
+  const releaseYear = result?.release_date
+    ? new Date(result.release_date).getFullYear()
+    : null;
   return (
     <TouchableOpacity onPress={handlePress}>
       <View style={styles.mainContainer}>
         <Image
           style={styles.image}
           source={{
-            uri: `${process.env.EXPO_PUBLIC_IMAGE_ORIGINAL_URL}/${props.movieResult.poster_path}`,
+            uri: `${process.env.EXPO_PUBLIC_IMAGE_ORIGINAL_URL}/${result?.poster_path}`,
           }}
         />
         <View style={styles.secondContainer}>
@@ -41,13 +41,13 @@ export default function SearchedMovieCard(props: SearchedMovieCardProps) {
               marginBottom: 14,
             }}
           >
-            {props.movieResult.title ?? "No name"}
+            {result?.title ?? "No name"}
           </Text>
 
           <View style={styles.textContainer}>
             <Ionicons name="star-outline" size={16} color="#FF8700" />
             <Text style={styles.rateText}>
-              {props.movieResult?.vote_average?.toFixed(1)}
+              {result?.vote_average?.toFixed(1)}
             </Text>
           </View>
 
@@ -86,7 +86,7 @@ export default function SearchedMovieCard(props: SearchedMovieCardProps) {
                 fontFamily: "Poppins",
               }}
             >
-              {props.movieResult.runtime + " minutes"}
+              {result?.runtime + " minutes"}
             </Text>
           </View>
         </View>

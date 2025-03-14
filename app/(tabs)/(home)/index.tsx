@@ -1,9 +1,4 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  TextInput,
-} from "react-native";
+import { StyleSheet, View, Text, TextInput } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect, useState } from "react";
@@ -14,16 +9,17 @@ import { get } from "@/data/requestHelpers";
 import HorizontalMovieCard from "@/components/HorizontalMovieCard";
 import { FlashList } from "@shopify/flash-list";
 import { router } from "expo-router";
+import HomeTabs from "@/components/Home/HomeTabs";
 
 export default function HomeScreen() {
-  const [movieResults, setMovieResults] = useState<types.movie.Result[]>([]);
+  const [movieResults, setMovieResults] = useState<types.movie.Movie[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
         setLoading(true);
-        const movieData = await get<types.movie.Movie>(`/movie/now_playing`, {
+        const movieData = await get<types.movie.MovieResult>(`/movie/now_playing`, {
           language: "en-US",
           page: 1,
           include: "profile",
@@ -47,50 +43,52 @@ export default function HomeScreen() {
   }, []);
 
   return (
-
-      <SafeAreaView style={styles.safeAreaViewContainer}>
-        <View style={styles.headerViewContainer}>
-          <Text style={styles.headerText}>
-            {homePageHeaderTitle}
-          </Text>
-          <View style={styles.searchBarContainer}>
-            <TextInput
-              placeholder="Search"
-              placeholderTextColor="#67686D"
-              clearButtonMode="always"
-              style={styles.searchBar}
-              onFocus={() => {
-                router.push('/(tabs)/(search)/search');
-              }}
-            ></TextInput>
-            <IconSymbol
-              size={28}
-              name="magnifyingglass"
-              color={"#67686D"}
-              style={styles.searchBarIcon}
-            />
-          </View>
+    <SafeAreaView style={styles.safeAreaViewContainer}>
+      <View style={styles.headerViewContainer}>
+        <Text style={styles.headerText}>{homePageHeaderTitle}</Text>
+        <View style={styles.searchBarContainer}>
+          <TextInput
+            placeholder="Search"
+            placeholderTextColor="#67686D"
+            clearButtonMode="always"
+            style={styles.searchBar}
+            onFocus={() => {
+              router.push("/(tabs)/(search)/search");
+            }}
+          ></TextInput>
+          <IconSymbol
+            size={28}
+            name="magnifyingglass"
+            color={"#67686D"}
+            style={styles.searchBarIcon}
+          />
         </View>
-          <View style={styles.container}>
-              <FlashList
-                data={movieResults}
-                keyExtractor={keyExtractor}
-                estimatedItemSize={210}
-                renderItem={({ item, index }) => <HorizontalMovieCard movie={item} index={index + 1} />}
-                horizontal
-                contentContainerStyle={styles.flashListContentContainer}
-                pagingEnabled
-                showsHorizontalScrollIndicator={false}
-                removeClippedSubviews={true}
-                disableAutoLayout
-              />
-          </View>
-      </SafeAreaView>
-
+      </View>
+      <View style={styles.container}>
+        <FlashList
+          data={movieResults}
+          keyExtractor={keyExtractor}
+          estimatedItemSize={210}
+          renderItem={({ item, index }) => (
+            <HorizontalMovieCard movie={item} index={index + 1} />
+          )}
+          horizontal
+          contentContainerStyle={styles.flashListContentContainer}
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          removeClippedSubviews={true}
+          disableAutoLayout
+        />
+      </View>
+      
+      <View style={styles.homeTabsContainer}>
+        <HomeTabs />
+      </View>
+    </SafeAreaView>
   );
 }
 
-function keyExtractor(item: types.movie.Result) {
+function keyExtractor(item: types.movie.Movie) {
   return item?.id.toString();
 }
 
@@ -123,11 +121,11 @@ const styles = StyleSheet.create({
   },
 
   flashListContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     width: "100%",
-    height: '44%',
+    height: "44%",
     marginTop: "8%",
-    backgroundColor: 'green',
+    backgroundColor: "green",
   },
 
   searchBarContainer: {
@@ -177,14 +175,22 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    display: 'flex',
-    flexDirection: 'column',
-    paddingTop: '8%',
-    height: '100%',
+    display: "flex",
+    flexDirection: "column",
+    paddingTop: "8%",
+    height: "100%",
   },
 
   flashListContentContainer: {
     paddingLeft: screenWidth * 0.08,
-  }
+  },
 
+  homeTabsContainer: {
+    position: 'absolute',
+    width: '100%',
+    height: '50%',
+    paddingHorizontal: "8%",
+    top: "62%",
+    bottom: 0,
+  },
 });

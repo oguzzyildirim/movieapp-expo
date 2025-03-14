@@ -8,27 +8,19 @@ export default function SearchLayout() {
     <View style={{ flex: 1 }}>
       <Stack>
         <Stack.Screen
-          name="search"
+          name="watchlist"
           options={{
-            title: "Search",
+            title: "Watch List",
             headerTitleStyle: { color: "white" },
             headerShown: true,
             headerStyle: { backgroundColor: Colors["light"].primary },
             headerLeft: () => (
               <TouchableOpacity
-                onPress={() => router.back()}
+                onPress={() => router.replace('/(tabs)/(home)')}
                 style={{ padding: "6%", paddingLeft: "3%" }}
                 activeOpacity={0.5}
               >
                 <Ionicons name="chevron-back" size={24} color="white" />
-              </TouchableOpacity>
-            ),
-            headerRight: () => (
-              <TouchableOpacity
-                style={{ padding: "6%", paddingLeft: "3%" }}
-                activeOpacity={0.5}
-              >
-                <Ionicons name="information-circle" size={24} color="white" />
               </TouchableOpacity>
             ),
           }}

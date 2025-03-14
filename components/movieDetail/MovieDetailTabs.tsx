@@ -10,12 +10,13 @@ import {
   SceneMap,
   TabBar,
 } from "react-native-tab-view";
-import MovieAbout from "./MovieAbout";
-import MovieCast from "./MovieCast/MovieCast";
+import MovieAbout from "../MovieDetail/MovieAbout";
+import MovieCast from "../MovieDetail/MovieCast/MovieCast";
 
 interface MovieDetailTabsProps {
   movieID: string;
   description: string;
+  isMovieDetailLoaded: boolean;
 }  
 
 export default function MovieDetailTabs(props: MovieDetailTabsProps) {
@@ -54,6 +55,14 @@ export default function MovieDetailTabs(props: MovieDetailTabsProps) {
       labelStyle={styles.tabLabelStyle}
     />
   );
+
+  if (!props.isMovieDetailLoaded) {
+    return (
+      <View style={styles.emptyContainer}>
+        <Text style={styles.emptyText}>Loading movie details...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>

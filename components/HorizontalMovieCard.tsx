@@ -2,7 +2,7 @@ import { router } from "expo-router";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 
 interface MovieCardProps {
-  movie: types.movie.Result;
+  movie: types.movie.Movie;
   index: number
 }
 

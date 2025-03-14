@@ -1,32 +1,32 @@
 declare namespace types.movie {
- interface Movie {
-    dates?: Dates;
-    page?: number;
-    results?: Result[];
-    total_pages?: number;
-    total_results?: number;
+ interface MovieResult {
+    dates: Dates;
+    page: number;
+    results: Movie[];
+    total_pages: number;
+    total_results: number;
   }
 
 interface Dates {
-    maximum?: Date;
-    minimum?: Date;
+    maximum: Date;
+    minimum: Date;
   }
 
- interface Result {
-    adult?: boolean;
-    backdrop_path?: string;
-    genre_ids?: number[];
+ interface Movie {
+    adult: boolean;
+    backdrop_path: string;
+    genre_ids: number[];
     id: number;
-    original_language?: OriginalLanguage;
-    original_title?: string;
-    overview?: string;
-    popularity?: number;
-    poster_path?: string;
-    release_date?: Date;
-    title?: string;
-    video?: boolean;
-    vote_average?: number;
-    vote_count?: number;
+    original_language: OriginalLanguage;
+    original_title: string;
+    overview: string;
+    popularity: number;
+    poster_path: string;
+    release_date: Date;
+    title: string;
+    video: boolean;
+    vote_average: number;
+    vote_count: number;
   }
 
   export enum OriginalLanguage {
@@ -36,19 +36,21 @@ interface Dates {
     Zh = "zh",
   }
 
-  interface EnhancedMovieResult extends types.movie.Result {
-    genres?: string[];
-    runtime?: number;
-    release_date?: string;
+  export type MovieCategoryType = 'now_playing' | 'upcoming' | 'top_rated' | 'popular';
+
+  export enum MovieCategory {
+    NowPlaying = "now_playing",
+    Upcoming = "upcoming",
+    TopRated = "top_rated",
+    Popular = "popular",
   }
-  
-  // Converts JSON strings to/from your types
+
   export class Convert {
-    public static toMovie(json: string): types.movie.Movie {
+    public static toMovie(json: string): types.movie.MovieResult {
       return JSON.parse(json);
     }
   
-    public static movieToJson(value: types.movie.Movie): string {
+    public static movieToJson(value: types.movie.MovieResult): string {
       return JSON.stringify(value);
     }
   }
